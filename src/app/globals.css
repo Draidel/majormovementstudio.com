@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — sourced from Figma */
+  --color-brand-coral: #ef878c;
+  --color-brand-coral-hover: #e76b71;
+  --color-brand-coral-soft: #ffd6d8;
+  --color-brand-coral-cream: #ffe9ea;
+  --color-brand-rose: #fff4f5;
+  --color-brand-ink: #15110f;
+  --color-brand-ink-muted: rgba(21, 17, 15, 0.7);
+
+  /* v2 — editorial cream palette (used by /v2). Same brand family,
+     warmer base tones, deeper ink for tighter typographic contrast. */
+  --color-brand-cream: #fbf6f1;
+  --color-brand-cream-deep: #f4ebe1;
+  --color-brand-ink-deep: #14110e;
+  --color-brand-ink-faint: rgba(20, 17, 14, 0.55);
+
+  /* Type stacks (variables come from next/font in layout.tsx) */
+  --font-sans: var(--font-figtree), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-praise), "Brush Script MT", cursive;
+
+  /* Radii */
+  --radius-pill: 9999px;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-hero: 36px;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 1px rgb(0 0 0 / 0.04);
+  --shadow-card: 0 3px 15px rgb(239 135 140 / 0.28);
+  --shadow-photo: 8px 8px 24px rgb(0 0 0 / 0.14);
+  --shadow-cta: 0 6px 18px rgb(0 0 0 / 0.18);
+  --shadow-lift: 0 18px 40px rgb(239 135 140 / 0.22);
+
+  /* Animations */
+  --animate-spin-slow: spin-slow 28s linear infinite;
+  --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-reveal: reveal 0.9s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Marquee — the duplicated child means -50% is one full cycle */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Reveal — used by the IntersectionObserver helper in /v2 */
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Anchor offset so smooth-scrolled targets aren't hidden behind sticky banners */
+    scroll-padding-top: 80px;
+  }
+
+  html,
+  body {
+    background: linear-gradient(180deg, #ffffff 0%, #fff4f5 28%, #ffd6d8 100%);
+    background-attachment: fixed;
+    color: var(--color-brand-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  /* Soft pink ambient blobs that mirror the Figma "gradient-1" overlays */
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    z-index: -1;
+    border-radius: 9999px;
+    filter: blur(140px);
+    opacity: 0.55;
+  }
+  body::before {
+    top: 24vh;
+    right: -12vw;
+    width: 70vw;
+    height: 70vw;
+    background: radial-gradient(closest-side, #ffb1b6 0%, transparent 70%);
+  }
+  body::after {
+    top: 78vh;
+    left: -22vw;
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(closest-side, #ffc7c9 0%, transparent 70%);
+  }
+
+  /* Crisp focus ring on every interactive element */
+  :where(a, button, [role="button"]):focus-visible {
+    outline: 2px solid var(--color-brand-coral);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-brand-coral);
+    color: white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-shadow-soft {
+    text-shadow: 0 1.77px 6.785px rgb(255 255 255 / 0.6);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Card hover lift — used across pricing and FAQ */
+  .hover-lift {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+}

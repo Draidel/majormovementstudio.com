@@ -1,0 +1,11 @@
+name: Major Movement Studio
+phone: "1234567890"
+phoneDisplay: (123) 456-7890
+email: Kate@majormovementstudio.com
+address: 38135 5th Ave. Zephyrhills, FL 33542
+hours:
+  - Monday-Friday 8am-7pm
+  - Saturday 10am-3pm
+social:
+  facebook: https://www.facebook.com/
+  instagram: https://www.instagram.com/
