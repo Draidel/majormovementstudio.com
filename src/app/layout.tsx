@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Praise } from "next/font/google";
 import "./globals.css";
@@ -50,7 +52,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${figtree.variable} ${praise.variable}`}>
-      <body className="min-h-screen overflow-x-hidden antialiased">{children}</body>
+      <body className="min-h-screen overflow-x-hidden antialiased">
+        {children}
+        {/* Vercel Analytics + Web Vitals — only emit beacons in production
+            so local dev doesn't pollute the dashboard. */}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
