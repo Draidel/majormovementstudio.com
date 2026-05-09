@@ -68,18 +68,17 @@ src/
 ├── components/
 │   ├── icons.tsx                       # inline SVG icon set (currentColor-based)
 │   ├── ui/                             # reusable atoms — props-only, no data layer access
-│   │   ├── announcement-banner.tsx
-│   │   ├── pill.tsx
-│   │   ├── price-row.tsx
-│   │   ├── section-heading.tsx
-│   │   ├── studio-info-card.tsx
+│   │   ├── reveal.tsx                  # 'use client' (IntersectionObserver fade-up)
 │   │   └── index.ts
 │   └── sections/                       # page sections — receive typed content, render markup
+│       ├── nav.tsx
 │       ├── hero.tsx
+│       ├── marquee.tsx
 │       ├── about-classes.tsx
 │       ├── memberships.tsx
 │       ├── faq.tsx                     # 'use client' (accordion state)
 │       ├── unlimited-cta.tsx
+│       ├── footer.tsx
 │       └── index.ts
 └── (no lib/ — content layer replaces it)
 ```

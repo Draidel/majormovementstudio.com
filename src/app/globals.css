@@ -10,8 +10,8 @@
   --color-brand-ink: #15110f;
   --color-brand-ink-muted: rgba(21, 17, 15, 0.7);
 
-  /* v2 — editorial cream palette (used by /v2). Same brand family,
-     warmer base tones, deeper ink for tighter typographic contrast. */
+  /* Editorial cream palette — warmer base tones with deeper ink for
+     tighter typographic contrast. */
   --color-brand-cream: #fbf6f1;
   --color-brand-cream-deep: #f4ebe1;
   --color-brand-ink-deep: #14110e;
@@ -67,7 +67,7 @@
     }
   }
 
-  /* Reveal — used by the IntersectionObserver helper in /v2 */
+  /* Reveal — used by the IntersectionObserver helper in `Reveal` */
   @keyframes reveal {
     from {
       opacity: 0;

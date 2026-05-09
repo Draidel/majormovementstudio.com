@@ -1,69 +1,92 @@
 /**
- * "About the classes" — photo collage on the left, class descriptions
- * on the right. Receives the class list from the page; renders them in
- * the order chosen by the editor.
+ * Editorial chapter layout for class types.
+ *
+ * Each class becomes a numbered "chapter" — number gutter on the left,
+ * title + body in the middle, photo on the right. Even-indexed entries
+ * mirror the layout (photo left, copy right) so the page reads with
+ * editorial rhythm rather than a stack.
+ *
+ * Photos cycle through `/images/about-1.jpg` and `/images/about-2.jpg`
+ * (the assets we already have); if more classes are added, photos
+ * repeat in order.
  */
 
 import Image from "next/image";
 import type { ClassItem } from "@/content";
-import { StarBig } from "../icons";
-import { SectionHeading } from "../ui";
+import { Reveal } from "../ui";
 
 type AboutClassesProps = {
   items: ClassItem[];
 };
 
+const PHOTOS = ["/images/about-1.jpg", "/images/about-2.jpg"] as const;
+
 export function AboutClasses({ items }: AboutClassesProps) {
   return (
-    <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
-      <SectionHeading lead="About the" script="classes" />
+    <section
+      id="about"
+      className="mx-auto w-full max-w-[1440px] scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
+    >
+      <Reveal as="header" className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+        <h2 className="text-balance leading-[0.95] tracking-[-0.02em] text-brand-ink-deep lg:col-span-9 lg:col-start-4">
+          <span className="block text-[clamp(36px,5.5vw,72px)] font-medium">About the</span>
+          <span className="block font-display text-[clamp(56px,9vw,120px)] font-normal italic leading-[0.85] tracking-normal text-brand-coral">
+            classes
+          </span>
+        </h2>
+      </Reveal>
 
-      <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-2 lg:items-center lg:gap-16">
-        {/* Photo collage — Figma layout: tall portrait + decorative star + landscape */}
-        <div className="relative mx-auto aspect-[6/5] w-full max-w-[560px] lg:mx-0">
-          <StarBig
-            className="pointer-events-none absolute right-[2%] top-[8%] size-[44%] text-brand-coral [animation:var(--animate-spin-slow)]"
-            style={{ opacity: 0.45 }}
-          />
+      <div className="mt-20 flex flex-col gap-24 sm:gap-32 lg:gap-40">
+        {items.map((item, index) => {
+          const reversed = index % 2 === 1;
+          const photo = PHOTOS[index % PHOTOS.length];
+          const number = String(item.order ?? index + 1).padStart(2, "0");
 
-          <div className="absolute left-0 top-0 h-[88%] w-[55%] overflow-hidden rounded-[24px] shadow-[var(--shadow-photo)]">
-            <Image
-              src="/images/about-1.jpg"
-              alt="Reformer Pilates session"
-              fill
-              sizes="(min-width: 1024px) 320px, 55vw"
-              className="object-cover"
-            />
-          </div>
+          return (
+            <Reveal
+              key={item.slug}
+              as="article"
+              className={`grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12 ${
+                reversed ? "" : ""
+              }`}
+            >
+              {/* Photo */}
+              <div
+                className={`relative aspect-[4/5] w-full overflow-hidden rounded-[24px] sm:aspect-[5/6] lg:aspect-[4/5] ${
+                  reversed ? "lg:col-span-6 lg:order-2" : "lg:col-span-6"
+                }`}
+              >
+                <Image
+                  src={photo}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 42vw, 100vw"
+                  className="object-cover"
+                  aria-hidden
+                />
+              </div>
 
-          {/* Soft coral plate behind the landscape photo for depth */}
-          <div
-            aria-hidden
-            className="absolute -bottom-3 -right-3 h-[42%] w-[60%] rounded-[24px] bg-brand-coral-soft"
-          />
-
-          <div className="absolute bottom-0 right-0 h-[42%] w-[60%] overflow-hidden rounded-[24px] shadow-[var(--shadow-photo)]">
-            <Image
-              src="/images/about-2.jpg"
-              alt="Mat Pilates instruction"
-              fill
-              sizes="(min-width: 1024px) 360px, 60vw"
-              className="object-cover"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-12 lg:gap-14">
-          {items.map((item) => (
-            <article key={item.slug} className="flex flex-col gap-5">
-              <span aria-hidden className="block h-[2px] w-14 bg-brand-coral" />
-              <h3 className="text-[22px] font-bold leading-tight tracking-tight">{item.name}</h3>
-              <p className="text-pretty text-[16px] leading-[1.7] text-brand-ink-muted">
-                {item.description}
-              </p>
-            </article>
-          ))}
-        </div>
+              {/* Copy */}
+              <div
+                className={`flex flex-col gap-8 ${
+                  reversed ? "lg:col-span-6 lg:order-1 lg:pr-8" : "lg:col-span-6 lg:pl-8"
+                }`}
+              >
+                <div className="flex items-baseline gap-5">
+                  <span className="font-display text-[clamp(56px,8vw,108px)] font-normal italic leading-none text-brand-coral">
+                    {number}
+                  </span>
+                  <h3 className="text-[clamp(28px,3.6vw,44px)] font-medium leading-[1.05] tracking-[-0.02em] text-brand-ink-deep">
+                    {item.name}
+                  </h3>
+                </div>
+                <p className="text-pretty text-[17px] leading-[1.65] text-brand-ink/80 sm:text-[18px]">
+                  {item.description}
+                </p>
+              </div>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );

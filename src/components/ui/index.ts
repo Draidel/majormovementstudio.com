@@ -6,9 +6,4 @@
  * a global rename.
  */
 
-export { AnnouncementBanner } from "./announcement-banner";
-export { Pill } from "./pill";
-export { PriceRow } from "./price-row";
 export { Reveal } from "./reveal";
-export { SectionHeading } from "./section-heading";
-export { StudioInfoCard } from "./studio-info-card";

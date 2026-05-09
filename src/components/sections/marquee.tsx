@@ -11,7 +11,7 @@
 
 const VALUES = ["Strength", "Confidence", "Balance", "Body", "Mind", "Movement"] as const;
 
-export function MarqueeV2() {
+export function Marquee() {
   // Duplicated for seamless loop — the -50% translateX in @keyframes
   // marquee lands precisely on the start of the second copy.
   const items = [...VALUES, ...VALUES];

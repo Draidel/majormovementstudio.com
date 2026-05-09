@@ -14,7 +14,7 @@ type FooterProps = {
   studio: Studio;
 };
 
-export function FooterV2({ studio }: FooterProps) {
+export function Footer({ studio }: FooterProps) {
   return (
     <footer
       id="visit"

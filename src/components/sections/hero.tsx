@@ -1,17 +1,17 @@
 /**
- * Hero — top of the homepage.
+ * Editorial hero — split-grid: oversized typographic wordmark on the
+ * left, full-bleed photo on the right.
  *
- * Composes the announcement banner, brand mark, mission statement, and
- * studio info card over a darkened photo background.
- *
- * Receives content as props from the page (`Hero` and `Studio`); does
- * not touch the data layer directly so it remains trivially testable.
+ * The brand name itself is the headline ("Major Movement Studio"), with
+ * "Movement" set in the Praise script for cinematic emphasis. The hero
+ * pitch becomes editorial body underneath. No card overlay on the
+ * photo; coral is reserved for the CTA underline.
  */
 
 import Image from "next/image";
 import type { Hero as HeroContent, Studio } from "@/content";
 import { ChevronRight } from "../icons";
-import { AnnouncementBanner, StudioInfoCard } from "../ui";
+import { Reveal } from "../ui";
 
 type HeroProps = {
   hero: HeroContent;
@@ -20,57 +20,84 @@ type HeroProps = {
 
 export function Hero({ hero, studio }: HeroProps) {
   return (
-    <section className="flex w-full flex-col items-center gap-3 px-3 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-10">
-      <AnnouncementBanner lead={hero.bannerLead} bold={hero.bannerBold} />
+    <section
+      id="top"
+      className="relative mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-5 pb-20 pt-12 sm:px-8 sm:pt-16 lg:grid-cols-12 lg:gap-12 lg:px-12 lg:pb-32 lg:pt-24"
+    >
+      {/* Type column */}
+      <div className="flex flex-col gap-10 lg:col-span-7 lg:gap-14">
+        <Reveal as="p" className="text-[12px] uppercase tracking-[0.22em] text-brand-ink-faint">
+          {hero.bannerLead} · {hero.bannerBold}
+        </Reveal>
 
-      <div className="relative w-full overflow-hidden rounded-3xl sm:rounded-[28px] lg:rounded-[32px]">
+        <Reveal delay={120}>
+          <h1 className="font-medium leading-[0.92] tracking-[-0.03em] text-brand-ink-deep">
+            <span className="block text-[clamp(56px,10vw,150px)]">{firstWord(studio.name)}</span>
+            <span className="block font-display text-[clamp(72px,14vw,200px)] font-normal italic leading-[0.85] tracking-normal text-brand-coral">
+              {middleWord(studio.name)}
+            </span>
+            <span className="block text-[clamp(56px,10vw,150px)]">{lastWord(studio.name)}</span>
+          </h1>
+        </Reveal>
+
+        <Reveal delay={240} className="flex max-w-[560px] flex-col gap-8">
+          <p className="text-pretty text-[18px] leading-[1.55] text-brand-ink/85 sm:text-[19px]">
+            {hero.pitch}
+          </p>
+
+          <a
+            href="#memberships"
+            className="group inline-flex items-center gap-3 self-start text-[15px] font-medium tracking-tight text-brand-ink-deep"
+          >
+            <span className="border-b-[1.5px] border-brand-coral pb-1.5 transition group-hover:border-brand-ink-deep">
+              {hero.ctaLabel}
+            </span>
+            <span className="grid size-9 place-items-center rounded-full border border-brand-ink-deep transition group-hover:bg-brand-coral group-hover:text-white">
+              <ChevronRight className="size-4" />
+            </span>
+          </a>
+        </Reveal>
+      </div>
+
+      {/* Photo column */}
+      <Reveal
+        delay={300}
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] lg:col-span-5 lg:aspect-auto"
+      >
         <Image
           src="/images/hero.jpg"
           alt=""
           fill
           priority
-          sizes="(min-width: 1280px) 1280px, 100vw"
+          sizes="(min-width: 1024px) 42vw, 100vw"
           className="object-cover"
           aria-hidden
         />
-        {/* Directional gradient — darker on the left so the white mission
-            copy stays legible; right side keeps the photo bright. */}
         <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(110deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0.55) 100%)",
-          }}
+          className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
           aria-hidden
         />
-
-        <div className="relative grid gap-8 px-5 pb-8 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(360px,420px)] lg:items-end lg:gap-10 lg:px-12 lg:pb-14 lg:pt-44 xl:px-14 xl:pb-16 xl:pt-48">
-          <Image
-            src="/images/logo-mark.png"
-            alt={studio.name}
-            width={180}
-            height={150}
-            priority
-            sizes="(min-width: 1024px) 180px, 130px"
-            className="absolute left-1/2 top-4 w-[110px] -translate-x-1/2 sm:top-6 sm:w-[150px] lg:w-[180px]"
-          />
-
-          <div className="flex flex-col gap-6 self-end lg:max-w-[600px]">
-            <p className="text-balance text-[18px] leading-[1.4] text-white sm:text-[22px] lg:text-[26px] xl:text-[28px] xl:leading-[1.35]">
-              {hero.pitch}
-            </p>
-            <a
-              href="#memberships"
-              className="group inline-flex items-center gap-1.5 self-start text-[15px] font-bold text-brand-coral transition hover:gap-2.5 sm:text-base"
-            >
-              {hero.ctaLabel}
-              <ChevronRight className="size-5 text-brand-coral transition-transform group-hover:translate-x-0.5" />
-            </a>
-          </div>
-
-          <StudioInfoCard studio={studio} />
+        {/* Tiny credit chip — uses studio data, not invented copy */}
+        <div className="absolute bottom-5 left-5 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/90">
+          <span className="size-1.5 rounded-full bg-white/90" aria-hidden />
+          <span>{studio.address.split(".")[0]}</span>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
+}
+
+// Helpers — split a multi-word name like "Major Movement Studio" into
+// first / middle / last word slots for the typographic layout. Falls
+// back gracefully if the name is shorter.
+function firstWord(name: string) {
+  return name.split(" ")[0] ?? name;
+}
+function middleWord(name: string) {
+  const parts = name.split(" ");
+  return parts.length >= 3 ? parts.slice(1, -1).join(" ") : "";
+}
+function lastWord(name: string) {
+  const parts = name.split(" ");
+  return parts.length >= 2 ? parts.at(-1) : "";
 }
